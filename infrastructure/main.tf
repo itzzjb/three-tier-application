@@ -43,12 +43,42 @@ resource "aws_route_table" "public-route-table" {
   }
 }
 
+# creating the routes (the entries) of the public route table
+# local routes are already setuped
+# route to the internet gateway
+resource "aws_route" "pubic-route" {
+  route_table_id         = aws_route_table.public-route-table.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.igw
+}
+
+# associating the public route table to the pubic subnet
+resource "aws_route_table_association" "public-rta" {
+  subnet_id      = aws_subnet.public-subnet.id
+  route_table_id = aws_route_table.public-route-table.id
+}
+
 # creating the route table for the private subnet
 resource "aws_route_table" "private-route-table" {
-    vpc_id = aws_vpc.vpc.id
-    tags = {
-        Name = "app-private-route-table"
-    }
+  vpc_id = aws_vpc.vpc.id
+  tags = {
+    Name = "app-private-route-table"
+  }
+}
+
+# creating the routes (the entries) of the private route table
+# local routes are already setuped
+# route to the nat gateway
+resource "aws_route" "private-route" {
+  route_table_id         = aws_route_table_association.private-rta.id
+  destination_cidr_block = "0.0.0.0/0"
+  # nat gateway details here
+}
+
+# associating the private route table to the private subnet
+resource "aws_route_table_association" "private-rta" {
+  subnet_id      = aws_subnet.private-subnet.id
+  route_table_id = aws_route_table.private-route-table.id
 }
 
 # creating security group for the public instance
