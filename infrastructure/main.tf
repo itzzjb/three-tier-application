@@ -35,12 +35,20 @@ resource "aws_subnet" "private-subnet" {
   }
 }
 
-# creating the route table
-resource "aws_route_table" "route-table" {
+# creating the route table for the public subnet
+resource "aws_route_table" "public-route-table" {
   vpc_id = aws_vpc.vpc.id
   tags = {
-    Name = "app-route-table"
+    Name = "app-public-route-table"
   }
+}
+
+# creating the route table for the private subnet
+resource "aws_route_table" "private-route-table" {
+    vpc_id = aws_vpc.vpc.id
+    tags = {
+        Name = "app-private-route-table"
+    }
 }
 
 # creating security group for the public instance
