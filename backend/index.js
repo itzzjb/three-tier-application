@@ -5,7 +5,7 @@ const port = 3000;
 
 // MySQL connection
 const connection = mysql.createConnection({
-  // We are going to use 
+  // We are going to use github secrets to store the db credentials
   host: process.env.DB_ENDPOINT,
   user: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
