@@ -7,7 +7,7 @@ resource "aws_vpc" "vpc" {
 }
 
 # creating the internet gateway for the vpc
-resource "aws_internet_gateway" "igw" {
+resource "aws_internet_gateway" "internet-gateway" {
   vpc_id = aws_vpc.vpc.id
   tags = {
     Name = "app-internet-gateway"
@@ -45,8 +45,8 @@ resource "aws_eip" "nat-eip" {
 
 # creating the nat gateway
 resource "aws_nat_gateway" "nat-gateway" {
-  subnet_id = aws_subnet.public-subnet.id # nat gateway is created in the public subnet
-  allocation_id = aws_eip.nat-eip.id # allocating the eip
+  subnet_id     = aws_subnet.public-subnet.id # nat gateway is created in the public subnet
+  allocation_id = aws_eip.nat-eip.id          # allocating the eip
   tags = {
     Name = "app-nat-gateway"
   }
@@ -66,7 +66,7 @@ resource "aws_route_table" "public-route-table" {
 resource "aws_route" "pubic-route" {
   route_table_id         = aws_route_table.public-route-table.id
   destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_internet_gateway.igw
+  gateway_id             = aws_internet_gateway.internet-gateway.id
 }
 
 # associating the public route table to the pubic subnet
@@ -89,7 +89,7 @@ resource "aws_route_table" "private-route-table" {
 resource "aws_route" "private-route" {
   route_table_id         = aws_route_table_association.private-rta.id
   destination_cidr_block = "0.0.0.0/0"
-  # nat gateway details here
+  gateway_id             = aws_nat_gateway.nat-gateway.id
 }
 
 # associating the private route table to the private subnet
@@ -154,11 +154,20 @@ resource "aws_security_group" "private-security-group" {
   }
 }
 
+# creating a key pair for ssh
+resource "aws_key_pair" "ssh-key-pair" {
+  key_name = "three-tier-key"
+  # we need to setup a key value pair locally and giving the public key here
+  public_key = file("C:/Users/januda.bethmin.de.si/.ssh/three-tier-key.pub")
+}
+
 # creating the ec2 instance in the public subnet
 resource "aws_instance" "public-instance" {
   instance_type = "t2.micro"
   ami           = data.aws_ami.ami.id
   subnet_id     = aws_subnet.public-subnet.id
+  key_name = aws_key_pair.ssh-key-pair.key_name
+  security_groups = [aws_security_group.public-security-group.id]
   tags = {
     Name = "app-public-instance"
   }
@@ -169,6 +178,8 @@ resource "aws_instance" "private-instance" {
   instance_type = "t2.micro"
   ami           = data.aws_ami.ami.id
   subnet_id     = aws_subnet.private-subnet.id
+  key_name = aws_key_pair.ssh-key-pair.key_name
+  security_groups = [aws_security_group.private-security-group.id]
   tags = {
     Name = "app-private-instance"
   }
