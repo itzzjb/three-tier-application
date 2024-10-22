@@ -35,6 +35,23 @@ resource "aws_subnet" "private-subnet" {
   }
 }
 
+# creating the elastic ip for the nat gateway (required)
+resource "aws_eip" "nat-eip" {
+  domain = "vpc"
+  tags = {
+    Name = "app-nat-gateway-eip"
+  }
+}
+
+# creating the nat gateway
+resource "aws_nat_gateway" "nat-gateway" {
+  subnet_id = aws_subnet.public-subnet.id # nat gateway is created in the public subnet
+  allocation_id = aws_eip.nat-eip.id # allocating the eip
+  tags = {
+    Name = "app-nat-gateway"
+  }
+}
+
 # creating the route table for the public subnet
 resource "aws_route_table" "public-route-table" {
   vpc_id = aws_vpc.vpc.id
