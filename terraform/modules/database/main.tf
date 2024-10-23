@@ -1,23 +1,27 @@
-# creating rds instance (mysql)
-resource "aws_db_instance" "rds-instance" {
+resource "aws_db_instance" "db-instance" {
+  identifier             = "example-db"
   allocated_storage      = 20
   engine                 = "mysql"
   engine_version         = "8.0"
-  instance_class         = "db.t3.micro"
+  instance_class         = "db.t3.micro" # Free tier eligible
   db_name                = var.database_name
   username               = var.database_username
   password               = var.database_password
-  db_subnet_group_name   = aws_db_subnet_group.db-subnet-group.id
-  vpc_security_group_ids = [aws_security_group.private-security-group.id] # setting up security groups for the rds instance
-  skip_final_snapshot    = true                                           # skipping taking a final snapshot before deletion
-  publicly_accessible    = false                                          # the rds instance is not allowed to access from outside the vpc
+  db_subnet_group_name   = aws_db_subnet_group.db-subnet-group.name
+  parameter_group_name   = "default.mysql8.0"
+  skip_final_snapshot    = true
+  vpc_security_group_ids = [var.security_group_id]
+
+  tags = {
+    Name = "example-db"
+  }
 }
 
-# creating the db subnet group to the rds instance
-# this lists the subnets that the db instance will be deployed
 resource "aws_db_subnet_group" "db-subnet-group" {
-  subnet_ids = [aws_subnet.private-subnet.id, aws_subnet.private-subnet-2.id]
+  name       = "example-subnet-group"
+  subnet_ids = var.private_subnet_ids
+
   tags = {
-    Name = "app-db-subnet-group"
+    Name = "example-subnet-group"
   }
 }

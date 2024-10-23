@@ -1,9 +1,7 @@
-output "public-instance-ip" {
-  description = "The public ip of the instance in public subnet"
+output "public_instance_ip" {
   value = aws_instance.public-instance.public_ip
 }
 
-output "private-instance-ip" {
-  description = "The private ip of the instance in the private subnet"
+output "private_instance_ip" {
   value = aws_instance.private-instance.private_ip
 }
