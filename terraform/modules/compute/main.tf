@@ -2,7 +2,7 @@
 resource "aws_security_group" "public-security-group" {
   name        = "app-public-security-group"
   description = "this security group allows ssh, http and https"
-  vpc_id      = aws_vpc.vpc.id
+  vpc_id      = var.vpc_id
   ingress {
     from_port   = 22
     to_port     = 22
@@ -36,7 +36,7 @@ resource "aws_security_group" "public-security-group" {
 resource "aws_security_group" "private-security-group" {
   name        = "private-security-group"
   description = "this security group alloes only ssh"
-  vpc_id      = aws_vpc.vpc.id
+  vpc_id      = var.vpc_id
   ingress {
     from_port   = 22
     to_port     = 22
@@ -65,7 +65,7 @@ resource "aws_key_pair" "ssh-key-pair" {
 resource "aws_instance" "public-instance" {
   instance_type   = "t2.micro"
   ami             = data.aws_ami.ami.id
-  subnet_id       = aws_subnet.public-subnet.id
+  subnet_id       = var.public_subnet_id
   key_name        = aws_key_pair.ssh-key-pair.key_name
   security_groups = [aws_security_group.public-security-group.id]
   tags = {
@@ -77,7 +77,7 @@ resource "aws_instance" "public-instance" {
 resource "aws_instance" "private-instance" {
   instance_type   = "t2.micro"
   ami             = data.aws_ami.ami.id
-  subnet_id       = aws_subnet.private-subnet.id
+  subnet_id       = var.private_subnet_id
   key_name        = aws_key_pair.ssh-key-pair.key_name
   security_groups = [aws_security_group.private-security-group.id]
   tags = {
