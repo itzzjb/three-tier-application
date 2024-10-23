@@ -13,11 +13,3 @@ resource "aws_db_instance" "rds-instance" {
   publicly_accessible    = false                                          # the rds instance is not allowed to access from outside the vpc
 }
 
-# creating the db subnet group to the rds instance
-# this lists the subnets that the db instance will be deployed
-resource "aws_db_subnet_group" "db-subnet-group" {
-  subnet_ids = [aws_subnet.private-subnet.id, aws_subnet.private-subnet-2.id]
-  tags = {
-    Name = "app-db-subnet-group"
-  }
-}
