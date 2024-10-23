@@ -1,24 +1,14 @@
 variable "database_name" {
-  description = "The name of the database"
   type        = string
+  description = "The database name"
 }
 
 variable "database_username" {
-  description = "The database admin account username"
   type        = string
+  description = "The database admin account username"
 }
 
 variable "database_password" {
+  type        = string
   description = "The database admin account password"
-  type        = string
-}
-
-variable "private_subnet_ids" {
-  description = "A list of private subnet IDs"
-  type        = list(string)
-}
-
-variable "security_group_id" {
-  description = "The security group ID for the RDS instance"
-  type        = string
 }
