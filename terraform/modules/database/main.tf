@@ -9,8 +9,8 @@ resource "aws_db_instance" "rds-instance" {
   password               = var.database_password
   db_subnet_group_name   = aws_db_subnet_group.db-subnet-group.id
   vpc_security_group_ids = [var.private_security_group_id] # setting up security groups for the rds instance
-  skip_final_snapshot    = true                                           # skipping taking a final snapshot before deletion
-  publicly_accessible    = false                                          # the rds instance is not allowed to access from outside the vpc
+  skip_final_snapshot    = true                            # skipping taking a final snapshot before deletion
+  publicly_accessible    = false                           # the rds instance is not allowed to access from outside the vpc
 }
 
 # creating the db subnet group to the rds instance
