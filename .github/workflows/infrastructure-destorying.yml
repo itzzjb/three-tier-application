@@ -1,0 +1,32 @@
+name: Dev Environment Infrastructure Destroying
+run-name: Dev Environment Infrastructure Destroying
+on:
+  workflow_dispatch:
+env: 
+  AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+  DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+  DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+  DATABASE_USERNAME:  ${{ secrets.DATABASE_USERNAME }}
+  SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
+jobs:
+  terraform:
+      name: Terraform Destroying
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout 
+          uses: actions/checkout@v4
+        - name: Setup Terraform
+          uses: hashicorp/setup-terraform@v3
+        - name: Configure AWS Credentials
+          uses: aws-actions/configure-aws-credentials@v4
+          with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+        - name: Terraform Init
+          # -chdir is used to change the directory where the terraform commands runs in
+          run: terraform -chdir=terraform/environments/dev init
+        - name: Terraform Destroy
+          run: terraform -chdir=terraform/environments/dev destroy -auto-approve -var="database_name=${{ env.DATABASE_NAME }}" -var="database_username=${{ env.DATABASE_USERNAME }}" -var="database_password=${{ env.DATABASE_PASSWORD }}" -var="ssh_public_key=${{ env.SSH_PUBLIC_KEY }}" -input=false
