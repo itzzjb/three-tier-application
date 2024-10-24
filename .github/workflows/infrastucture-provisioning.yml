@@ -16,6 +16,8 @@ jobs:
           uses: actions/checkout@v4
         - name: Setup Terraform
           uses: hashicorp/setup-terraform@v3
+        - name: Configure AWS Credentials
+          run: aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY }} && aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} && aws configure set region ${{ env.AWS_DEFAULT_REGION }}
         - name: Terraform Init
           # -chdir is used to change the directory where the terraform commands runs in
           run: terraform -chdir=terraform/environments/dev init
