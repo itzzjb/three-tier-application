@@ -19,7 +19,7 @@ jobs:
           # -chdir is used to change the directory where the terraform commands runs in
           run: terraform -chdir=terraform/environments/dev init
         - name: test secrets
-          run: echo AWS_ACCESS_KEY
+          run: echo ${{env.AWS_ACCESS_KEY}}]
 
         - name: Terraform Plan
           run: terraform -chdir=terraform/environments/dev plan
