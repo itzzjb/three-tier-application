@@ -20,8 +20,6 @@ jobs:
           # -chdir is used to change the directory where the terraform commands runs in
           run: terraform -chdir=terraform/environments/dev init
         - name: Create terraform.tfvars file using the sored Github Secret
-          run: |
-            echo ${{ env.TF_VARS_FILE }} >> terraform/environments/dev/terraform.tfvars
-            cat terraform/environments/dev/terraform.tfvars
-        # - name: Terraform Plan
-        #   run: terraform -chdir=terraform/environments/dev plan
+          run: echo "${{ env.TF_VARS_FILE }}" >> terraform.tfvars
+        - name: Terraform Plan
+          run: terraform -chdir=terraform/environments/dev plan -var-file=terraform.tfvars
