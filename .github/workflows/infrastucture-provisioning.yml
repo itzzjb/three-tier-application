@@ -30,3 +30,5 @@ jobs:
           run: terraform -chdir=terraform/environments/dev init
         - name: Terraform Plan
           run: terraform -chdir=terraform/environments/dev plan -var="database_name=${{ env.DATABASE_NAME }}" -var="database_username=${{ env.DATABASE_USERNAME }}" -var="database_password=${{ env.DATABASE_PASSWORD }}" -var="ssh_public_key=${{ env.SSH_PUBLIC_KEY }}" -input=false
+        - name: Terraform Apply
+          run: terraform -chdir=terraform/environments/dev apply -auto-approve -var="database_name=${{ env.DATABASE_NAME }}" -var="database_username=${{ env.DATABASE_USERNAME }}" -var="database_password=${{ env.DATABASE_PASSWORD }}" -var="ssh_public_key=${{ env.SSH_PUBLIC_KEY }}" -input=false
