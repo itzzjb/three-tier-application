@@ -8,6 +8,8 @@ module "compute" {
   # need to pass in the outputs from the network module as inputs to the compute module
   private_subnet_id = module.network.private-subnet-id
   public_subnet_id  = module.network.public-subnet-id
+  # need to pass in the public key from 
+  ssh_public_key = var.ssh_public_key
 }
 
 module "database" {

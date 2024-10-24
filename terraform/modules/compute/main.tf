@@ -58,7 +58,8 @@ resource "aws_security_group" "private-security-group" {
 resource "aws_key_pair" "ssh-key-pair" {
   key_name = "three-tier-key"
   # we need to setup a key value pair locally and giving the public key here
-  public_key = file("C:/Users/januda.bethmin.de.si/.ssh/three-tier-key.pub")
+  # this is recieved from github secrets from the workflow as an input variable or terraform
+  public_key = var.ssh_public_key
 }
 
 # creating the ec2 instance in the public subnet
