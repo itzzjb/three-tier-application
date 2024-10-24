@@ -2,6 +2,10 @@ name: Dev Environment Infrastructure Provisioning
 run-name: Dev Environment Infrastructure Provisioning
 on:
   workflow_dispatch:
+env: 
+  AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
 jobs:
   terraform:
       name: Terraform Provisioning
@@ -12,4 +16,10 @@ jobs:
         - name: Setup Terraform
           uses: hashicorp/setup-terraform@v3
         - name: Terraform Init
+          # -chdir is used to change the directory where the terraform commands runs in
           run: terraform -chdir=terraform/environments/dev init
+        - name: test secrets
+          run: echo AWS_ACCESS_KEY
+
+        - name: Terraform Plan
+          run: terraform -chdir=terraform/environments/dev plan
