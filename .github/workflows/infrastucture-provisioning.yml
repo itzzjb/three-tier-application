@@ -1,0 +1,12 @@
+name: Dev Environment Infrastructure Provisioning
+run-name: Dev Environment Infrastructure Provisioning
+on:
+  workflow_dispatch:
+jobs:
+  terraform:
+      name: Terraform Provisioning
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout 
+          uses: actions/checkout@v4
+            
