@@ -6,7 +6,9 @@ env:
   AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-  TF_VARS_FILE: ${{ secrets.TF_VARS_FILE }}
+  DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+  DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+  DATABASE_USERNAME:  ${{ secrets.DATABASE_USERNAME }}
 jobs:
   terraform:
       name: Terraform Provisioning
@@ -25,7 +27,8 @@ jobs:
         - name: Terraform Init
           # -chdir is used to change the directory where the terraform commands runs in
           run: terraform -chdir=terraform/environments/dev init
-        - name: Create terraform.tfvars file using the sored Github Secret
-          run: echo "${{ env.TF_VARS_FILE }}" >> terraform/environments/dev/terraform.tfvars
-        # - name: Terraform Plan
-        #   run: terraform -chdir=terraform/environments/dev plan -var-file=terraform.tfvars
+        - name: Terraform Plan
+          run: terraform -chdir=terraform/environments/dev plan \
+            -var="database_name=${{ env.DATABASE_NAME }}" \
+            -var="databade_username=${{ env.DATABASE_USERNAME }}" \
+            -var="database_password=${{ env.DATABASE_PASSWORD }}" 
