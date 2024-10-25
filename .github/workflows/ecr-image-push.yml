@@ -26,9 +26,9 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
       - name: Build and Push the frontend image
         run: |
-           docker build ./frontend/ -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY_FRONTEND }}:latest
-           docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY_FRONTEND }}:latest
-      - name: Build and Push the frontend image
+           docker build ./frontend/ -t $ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:latest
+           docker push $ECR_REGISTRY }}/$ECR_REPOSITORY_FRONTEND:latest
+      - name: Build and Push the backend image
         run: |
-           docker build ./backend/ -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY_BACKEND }}:latest
-           docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY_BACKEND }}:latest
+           docker build ./backend/ -t $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:latest
+           docker push $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:latest
