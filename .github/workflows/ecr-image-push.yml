@@ -9,6 +9,7 @@ env:
   $ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
   $ECR_REPOSITORY_FRONTEND: ${{ secrets.ECR_REPOSITORY_FRONTEND }}
   $ECR_REPOSITORY_BACKEND: ${{ secrets.ECR_REPOSITORY_BACKEND }}
+  $IMAGE_TAG: ${{ secrets.IMAGE_TAG }}
 jobs: 
   ecr:
     name: Build and Push images
@@ -26,9 +27,9 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
       - name: Build and Push the frontend image
         run: |
-           docker build ./frontend/ -t $ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:latest
-           docker push $ECR_REGISTRY }}/$ECR_REPOSITORY_FRONTEND:latest
+           docker build ./frontend/ -t $ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:$IMAGE_TAG
+           docker push $ECR_REGISTRY }}/$ECR_REPOSITORY_FRONTEND:$IMAGE_TAG
       - name: Build and Push the backend image
         run: |
-           docker build ./backend/ -t $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:latest
-           docker push $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:latest
+           docker build ./backend/ -t $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:$IMAGE_TAG
+           docker push $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:$IMAGE_TAG
