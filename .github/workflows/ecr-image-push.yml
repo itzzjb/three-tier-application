@@ -23,12 +23,12 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
       - name: Login to Amazon ECR
-        uses: aws-actions/amazom-ecr-login@v2
+        uses: aws-actions/amazon-ecr-login@v2
       - name: Build and Push the frontend image
         run: |
            docker build ./frontend/ -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY_FRONTEND }}:latest
            docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY_FRONTEND }}:latest
       - name: Build and Push the frontend image
         run: |
-           docker build ./frontend/ -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY_BACKEND }}:latest
+           docker build ./backend/ -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY_BACKEND }}:latest
            docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY_BACKEND }}:latest
