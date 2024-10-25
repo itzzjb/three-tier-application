@@ -28,7 +28,7 @@ jobs:
       - name: Build and Push the frontend image
         run: |
            docker build ./frontend/ -t $ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:$IMAGE_TAG
-           docker push $ECR_REGISTRY }}/$ECR_REPOSITORY_FRONTEND:$IMAGE_TAG
+           docker push $ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:$IMAGE_TAG
       - name: Build and Push the backend image
         run: |
            docker build ./backend/ -t $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:$IMAGE_TAG
