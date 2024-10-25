@@ -6,6 +6,11 @@ terraform {
     region = "us-east-2"
     key = "dev/key/terraform.tfstate" # name of the file that need to be created 
     # dev/key/ are just a directories inside the s3 bucket
+    
+    # now we can setup dynamodb to state lock the infrastucture
+    # so, there won't be any conflicts like multiple developers 
+    dynamodb_table = "terraform-locks"
+    encrypt = true
   }
   required_providers {
     aws = {
