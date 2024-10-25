@@ -1,0 +1,14 @@
+name: Setup RDS MySQL Database
+run-name: Setup RDS MySQL Database
+on: 
+  workflow_dispatch:
+jobs:
+  setup-rds:
+    name: Setting up RDS MySQL DB
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: action/checkout@v4
+      # todo: the db_host is outputted by the terraform provisioning pipeline
+
+
